@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour
     [Header("Flied")]
     public Card[,] field;
 
-    public void TouchEventStart(Vector2 vector)
+    public void TouchEventStart(Vector2 vector) // LEAN
     {
         var normalized = vector.normalized;
         player.Move(Convert.ToInt32(normalized.x), Convert.ToInt32(normalized.y));
@@ -266,7 +266,6 @@ public class GameController : MonoBehaviour
         while (!find)
         {
             var cardLvl = RandomRules(lvlProgression);
-            Debug.Log("LVL CARD: " + cardLvl);
             foreach (var card in list)
             {
                 if (card.lvl == cardLvl) {
