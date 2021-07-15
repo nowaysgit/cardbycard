@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game = GameManager;
 
-public class InventoryLoot : Inventory
+public class InventoryLoot : InventoryBase
 {
     [HideInInspector]
-    public InventoryUI UI;
+    public UIInventory UI;
 
     protected override void Awake()
     {
-        game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        UI = game.inventoryUILoot;
+        UI = Game.UIManager.UILoot;
     }
 }

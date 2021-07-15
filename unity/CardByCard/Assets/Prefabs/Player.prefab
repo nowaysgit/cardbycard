@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8512183623184569541}
   - component: {fileID: 8512183623184569547}
-  - component: {fileID: 8512183623184569540}
   - component: {fileID: -4762412845653492666}
-  - component: {fileID: 1818661064400976487}
+  - component: {fileID: 7777355917714747725}
+  - component: {fileID: 5137130722655016637}
+  - component: {fileID: 6574903988643826035}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -86,24 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8512183623184569540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8512183623184569542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8ee6e2db83ea1418794da5d54908ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AttackFXPrefab: {fileID: 8681536974527918279, guid: 87f4806533101b74aa6cedc6d1a7bca3, type: 3}
-  ManaCost: 0
-  spriteName: Character1
-  sprite: {fileID: 8512183623184569547}
-  inventory: {fileID: -4762412845653492666}
-  inventoryItems: {fileID: 0}
 --- !u!114 &-4762412845653492666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 9
---- !u!114 &1818661064400976487
+--- !u!114 &7777355917714747725
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,9 +109,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 8512183623184569542}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f87e78a200f7f647bba66ceb53fade8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6fe86d806701e594189426b558e10924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5137130722655016637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512183623184569542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc944d10d7461d54cbbf4fe75353d054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpriteName: 
+--- !u!114 &6574903988643826035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512183623184569542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e78bcf064fe8f74d9417bde8f0c510a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManaCost: 0
+  OnDied:
+    m_PersistentCalls:
+      m_Calls: []
+  attackFXPrefab: {fileID: 8681536974527918279, guid: 87f4806533101b74aa6cedc6d1a7bca3, type: 3}
+  Control: {fileID: 5137130722655016637}
 --- !u!1001 &917637380230297568
 PrefabInstance:
   m_ObjectHideFlags: 0

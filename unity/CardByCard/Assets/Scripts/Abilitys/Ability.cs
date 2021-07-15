@@ -15,7 +15,7 @@ public class Ability : MonoBehaviour
     }
     public void DisposableHeal(Item item, GameObject attacking = null, GameObject receiver = null)
     {
-        var controller = attacking.GetComponent<Controller>();
+        var controller = attacking.GetComponent<Interactive>();
         var result = controller.Health+item.Info.damage;
         var max = controller.HealthMax;
         if (result>=max) 
@@ -27,18 +27,20 @@ public class Ability : MonoBehaviour
             controller.Health = result;
         }
     }
-    public void DisposableHealMana(Item item, GameObject attacking = null, GameObject receiver = null)
+    public void FireBall(Item item, GameObject attacking = null, GameObject receiver = null)
     {
-        var controller = attacking.GetComponent<Controller>();
-        var result = controller.Mana+item.Info.damage;
-        var max = controller.ManaMax;
-        if (result>=max) 
-        {
-            controller.Mana = max;
-        }
-        else
-        {
-            controller.Mana = result;
-        }
+        var rec = receiver.GetComponent<CardBase>();
+        var att = attacking.GetComponent<Interactive>();
+
+        rec.Damage(item.Info.damage);
+        att.SetMana(item.Info.manaCost);
+    }
+    public void SnowBall(Item item, GameObject attacking = null, GameObject receiver = null)
+    {
+        var rec = receiver.GetComponent<CardBase>();
+        var att = attacking.GetComponent<Interactive>();
+
+        rec.Damage(item.Info.damage);
+        att.SetMana(item.Info.manaCost);
     }
 }

@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game = GameManager;
 
 public class RandomMove : MonoBehaviour
 {
     public float speed;
     void Start()
     {
-        StartCoroutine(GameObject.FindGameObjectWithTag("GameController").GetComponent<AnimatorUI>().MoveUI(gameObject, gameObject.transform.GetChild(Random.Range(0,8)).gameObject, speed));
+        StartCoroutine(Game.UIAnimator.MoveUI(gameObject, gameObject.transform.GetChild(Random.Range(0,8)).gameObject, speed));
     }
 }

@@ -109,7 +109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6123402968702777484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d2404796cd16da46b9bef76ac27e88f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a0f003c451bb254fb4b9287e8d85be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   FxInstance: {fileID: 1604227354005263177, guid: d6d04e4b024a73147a9b9f10d607f384, type: 3}
@@ -127,8 +127,12 @@ MonoBehaviour:
     size: 0
     damage: 0
     spriteName: 
+    lvl: 0
   IsBlocked: 1
-  inventory: {fileID: 8735999100701017921}
+  OnDied:
+    m_PersistentCalls:
+      m_Calls: []
+  Inventory: {fileID: 8735999100701017921}
 --- !u!114 &8735999100701017921
 MonoBehaviour:
   m_ObjectHideFlags: 0

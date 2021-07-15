@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.IO;
 
 [System.Serializable]
-public class ItemInfo
+public class InfoItem
 {
     public bool spawned;
     public int id;
@@ -16,12 +16,15 @@ public class ItemInfo
     public float manaCost;
     public string type;
     public string typeAbility;
+    public string attackMethod;
+    public string attackArea;
+    public int kd;
     public string spriteName;
     public int cost;
     public int lvl;
 }
 [System.Serializable]
-public class CardInfo
+public class InfoCard
 {
     public bool spawned;
     public int id;
@@ -39,25 +42,19 @@ public class CardInfo
 [System.Serializable]
 public class Data
 {
-    [SerializeField] 
-    private CardInfo[] enemyList;
-    [SerializeField] 
-    private CardInfo[] lootList;
-    [SerializeField] 
-    private CardInfo[] blockList;
-    [SerializeField] 
-    private CardInfo[] shopList;
-    [SerializeField] 
-    private CardInfo[] emptyList;
-    [SerializeField] 
-    private ItemInfo[] itemList;
+    [SerializeField] private InfoCard[] enemyList;
+    [SerializeField] private InfoCard[] lootList;
+    [SerializeField] private InfoCard[] blockList;
+    [SerializeField] private InfoCard[] shopList;
+    [SerializeField] private InfoCard[] emptyList;
+    [SerializeField] private InfoItem[] itemList;
     
-    public CardInfo[] EnemyList { get { return enemyList; } }
-    public CardInfo[] LootList { get { return lootList; } }
-    public CardInfo[] BlockList { get { return blockList; } }
-    public CardInfo[] ShopList { get { return shopList; } }
-    public CardInfo[] EmptyList { get { return emptyList; } }
-    public ItemInfo[] ItemList { get { return itemList; } }
+    public InfoCard[] EnemyList { get { return enemyList; } }
+    public InfoCard[] LootList { get { return lootList; } }
+    public InfoCard[] BlockList { get { return blockList; } }
+    public InfoCard[] ShopList { get { return shopList; } }
+    public InfoCard[] EmptyList { get { return emptyList; } }
+    public InfoItem[] ItemList { get { return itemList; } }
 
     public T CopyFromSerialize<T>(T SerializableObject) where T : new()
     {

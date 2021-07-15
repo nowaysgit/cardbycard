@@ -2455,8 +2455,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2086620877}
-        m_TargetAssemblyTypeName: InventoryUIItems, Assembly-CSharp
-        m_MethodName: OnLickTabs
+        m_TargetAssemblyTypeName: UIBackpack, Assembly-CSharp
+        m_MethodName: OnCLickTabs
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2589,7 +2589,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1278536048}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: InventoryUILoot, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 3
@@ -3558,8 +3558,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2086620877}
-        m_TargetAssemblyTypeName: InventoryUIItems, Assembly-CSharp
-        m_MethodName: OnLickTabs
+        m_TargetAssemblyTypeName: UIBackpack, Assembly-CSharp
+        m_MethodName: OnCLickTabs
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3774,7 +3774,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1278536048}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: InventoryUILoot, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 3
@@ -3833,10 +3833,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 725917636}
-  - component: {fileID: 725917635}
   - component: {fileID: 725917637}
   - component: {fileID: 725917638}
+  - component: {fileID: 725917642}
+  - component: {fileID: 725917641}
+  - component: {fileID: 725917640}
   - component: {fileID: 725917639}
+  - component: {fileID: 725917635}
+  - component: {fileID: 725917643}
   m_Layer: 0
   m_Name: Game
   m_TagString: GameController
@@ -3853,48 +3857,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 725917634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73f5e15c72396ef498b01892d90b625e, type: 3}
+  m_Script: {fileID: 11500000, guid: ad9629f070d10584a86d042118de490c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeCardName:
-  - EnemyList
-  - LootList
-  - BlockList
-  - EmptyList
-  - ShopList
-  chanceCardProgression: 960000000a0000001e000000960000003c000000
-  lvlProgression: 64000000320000000a000000
-  fieldSize: 3
-  cardSize: 2
-  CardsPrefab:
-  - {fileID: 3436954976642993872, guid: 5b5c81795013d7248bc6047de0223027, type: 3}
-  - {fileID: 6123402968702777484, guid: 47099b3db1b0fd54482fdbefb338bc4d, type: 3}
-  - {fileID: 6130634089098418443, guid: 829f29fd23deab64396f82019a607b28, type: 3}
-  - {fileID: 506427137308011102, guid: 004785720e5cffe4a82c2988325a6c80, type: 3}
-  - {fileID: 3071224337834485685, guid: deaa2320400874045b653f9808139a01, type: 3}
-  PlayerPrefab: {fileID: 8512183623184569542, guid: f4ef797377170ad44b4f7db9f0ec10b7, type: 3}
-  ItemPrefab: {fileID: 7817638220021607134, guid: d9310e3b840c14b4196c852586ff834e, type: 3}
-  player: {fileID: 0}
-  playerPossition: {x: 0, y: 0}
-  numMoves: 0
-  textHealth: {fileID: 1578145204}
-  textMana: {fileID: 1977282659}
-  textMoney: {fileID: 2049427852}
-  sliderHealth: {fileID: 1955013344}
-  sliderMana: {fileID: 158006044}
-  diePanel: {fileID: 1251412477}
-  animatorUI: {fileID: 725917639}
-  inventoryUI: {fileID: 1175102682}
-  inventoryUILoot: {fileID: 1278536048}
-  inventoryUIItems: {fileID: 2086620877}
   jsonFile: {fileID: 4900000, guid: 1f4ace753ff6dc341a802d90241c4fb2, type: 3}
-  data:
-    enemyList: []
-    lootList: []
-    blockList: []
-    shopList: []
-    emptyList: []
-    itemList: []
+  OnGameRestart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerRespawn:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &725917636
 Transform:
   m_ObjectHideFlags: 0
@@ -3942,7 +3914,94 @@ MonoBehaviour:
   m_GameObject: {fileID: 725917634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7896ba3e607cfb5458975ffaa3ee6870, type: 3}
+  m_Script: {fileID: 11500000, guid: c90a24a6cef9f8d48b489854db88217d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextHealth: {fileID: 1578145204}
+  TextMana: {fileID: 1977282659}
+  TextMoney: {fileID: 2049427852}
+  SliderHealth: {fileID: 1955013344}
+  SliderMana: {fileID: 158006044}
+  DiePanel: {fileID: 1251412477}
+  UIAnimator: {fileID: 0}
+  UIInventory: {fileID: 1175102682}
+  UILoot: {fileID: 1278536048}
+  UIBackpack: {fileID: 2086620877}
+--- !u!114 &725917640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725917634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ec37a8092d0454eb88bcd2e9947572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LvlProgression: 6400000046000000280000001e000000
+  cardsPrefab:
+  - {fileID: 3436954976642993872, guid: 5b5c81795013d7248bc6047de0223027, type: 3}
+  - {fileID: 6123402968702777484, guid: 47099b3db1b0fd54482fdbefb338bc4d, type: 3}
+  - {fileID: 6130634089098418443, guid: 829f29fd23deab64396f82019a607b28, type: 3}
+  - {fileID: 506427137308011102, guid: 004785720e5cffe4a82c2988325a6c80, type: 3}
+  - {fileID: 3071224337834485685, guid: deaa2320400874045b653f9808139a01, type: 3}
+  typeCardName:
+  - EnemyList
+  - LootList
+  - BlockList
+  - EmptyList
+  - ShopList
+  chanceCardProgression: 3200000005000000140000001e0000001e000000
+  maxCardsTypeCount: 0600000009000000020000000400000004000000
+--- !u!114 &725917641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725917634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e6dfc3641166d4d90db4036bc66fd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LvlProgression: 6400000046000000280000001e000000
+  itemPrefab: {fileID: 7817638220021607134, guid: d9310e3b840c14b4196c852586ff834e, type: 3}
+--- !u!114 &725917642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725917634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a03408b930fdd4bbfaa72f4826f131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fieldSize: 3
+  cardSize: 2
+  playerPrefab: {fileID: 8512183623184569542, guid: f4ef797377170ad44b4f7db9f0ec10b7, type: 3}
+  Player: {fileID: 0}
+  PlayerPossition: {x: 0, y: 0}
+  OnMoved:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCardClick:
+    m_PersistentCalls:
+      m_Calls: []
+  LastCardClick: {fileID: 0}
+--- !u!114 &725917643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725917634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 969d5ca4ec96c42429c4ce9826544804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &731346698
@@ -4879,7 +4938,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1278536048}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: InventoryUILoot, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 3
@@ -5405,7 +5464,7 @@ GameObject:
   - component: {fileID: 1175102684}
   - component: {fileID: 1175102682}
   m_Layer: 5
-  m_Name: InventoryUI
+  m_Name: UIInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5446,7 +5505,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1175102680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 196a93d340f864f4b9b7f2f37077412b, type: 3}
+  m_Script: {fileID: 11500000, guid: 07bb99e8e11f5144eb7392c936002b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!222 &1175102684
@@ -6246,7 +6305,7 @@ GameObject:
   - component: {fileID: 1278536047}
   - component: {fileID: 1278536048}
   m_Layer: 5
-  m_Name: InventoryUILoot
+  m_Name: UILoot
   m_TagString: InventoryUILoot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6315,14 +6374,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1278536045}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc931e763034b7c44a62112fc52b84c1, type: 3}
+  m_Script: {fileID: 11500000, guid: fe7008a9c87d17f47a37fb7362e09f2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinIcon: {fileID: 1645914119}
+  coinIconPrefab: {fileID: 4017667533429716071, guid: 9eeeaa8e438b2f547ae9bc4b1ffc6e7d, type: 3}
+  emptyColor: {r: 0.26415092, g: 0.19303338, b: 0, a: 0}
+  itemColor: {r: 0.5764706, g: 0.41960788, b: 0, a: 1}
   Items: []
-  CoinIcon: {fileID: 1645914119}
-  CoinIconPrefab: {fileID: 4017667533429716071, guid: 9eeeaa8e438b2f547ae9bc4b1ffc6e7d, type: 3}
-  EmptyColor: {r: 0.28235295, g: 0.20784315, b: 0, a: 1}
-  ItemColor: {r: 0.5764706, g: 0.41960788, b: 0, a: 1}
   Count: 0
 --- !u!222 &1278536049
 CanvasRenderer:
@@ -7101,8 +7160,8 @@ MonoBehaviour:
   onDelta:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 725917635}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+      - m_Target: {fileID: 725917642}
+        m_TargetAssemblyTypeName: ControllerField, Assembly-CSharp
         m_MethodName: TouchEventStart
         m_Mode: 0
         m_Arguments:
@@ -7285,6 +7344,7 @@ GameObject:
   - component: {fileID: 1431489684}
   - component: {fileID: 1431489687}
   - component: {fileID: 1431489688}
+  - component: {fileID: 1431489689}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -7384,12 +7444,28 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431489683}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca1ace5511de06c4aa9c2702892a327e, type: 3}
+  m_Script: {fileID: 11500000, guid: 0650d9c62254f2246b3d92cb451617da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1431489685}
+--- !u!114 &1431489689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431489683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &1433989211
 GameObject:
   m_ObjectHideFlags: 0
@@ -7474,7 +7550,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2086620877}
-        m_TargetAssemblyTypeName: InventoryUIItems, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIBackpack, Assembly-CSharp
         m_MethodName: Open
         m_Mode: 1
         m_Arguments:
@@ -9457,8 +9533,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 725917635}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: Respawn
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: PlayerRespawn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10578,7 +10654,7 @@ GameObject:
   - component: {fileID: 2086620875}
   - component: {fileID: 2086620877}
   m_Layer: 5
-  m_Name: InventoryUIItems
+  m_Name: UIBackpack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10655,16 +10731,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2086620873}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c6e4b8ba89e04148833664e32045572, type: 3}
+  m_Script: {fileID: 11500000, guid: a4b88fa1eb08e78438cbb530e93edc3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Slots:
-  - {fileID: 1718277034}
-  - {fileID: 1149194829}
-  - {fileID: 1481127294}
-  - {fileID: 1177472607}
-  ButtonWeapon: {fileID: 702698804}
-  ButtonAbilities: {fileID: 430996368}
+  slots:
+  - {fileID: 1205767680}
+  - {fileID: 225022697}
+  - {fileID: 188820567}
+  - {fileID: 1386334683}
+  buttonWeapon: {fileID: 702698804}
+  buttonAbilities: {fileID: 430996368}
   itemUIPrefab: {fileID: 5227975774916033172, guid: 35547145c55789c4ebb2387d27dcdfc3, type: 3}
   listWeapons: {fileID: 1123099892}
   listAbilities: {fileID: 84709815}
@@ -10864,8 +10940,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 725917635}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: Restart
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: GameRestart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

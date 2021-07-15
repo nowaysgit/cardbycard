@@ -15,6 +15,6 @@ public class Weapon : MonoBehaviour
     }
     public void Attack(Item item, GameObject attacking = null, GameObject receiver = null)
     {
-        receiver.GetComponent<Controller>().Health-=item.Info.damage;
+        receiver.GetComponent<Interactive>().Health-=item.Info.damage;
     }
 }
