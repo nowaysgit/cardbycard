@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,21 +9,20 @@ public class FactoryCard : FactoryBase
     [Header("Chance LVL Settings")]
     [SerializeField] public int[] LvlProgression;
 
-    [Header("Prefabs")]
-    [SerializeField] private GameObject[] cardsPrefab;
-
     [Header("Chance Card Settings ( Enemy | Loot | Block | Empty | Shop )")]
     [SerializeField] private string[] typeCardName;
+    [SerializeField] private Dictionary<string, int> typeCardId = new Dictionary<string, int> { {"Enemy", 0}, {"Loot", 1}, {"Block", 2}, {"Empty", 3}, {"Shop", 4}};
     [SerializeField] private int[] chanceCardProgression;
-    [SerializeField] private int[] maxCardsTypeCount = { 6, 9, 3, 3, 4, }; // ( Enemy | Loot | Block | Empty | Shop )
-    private int[] cardsTypeCount = { 0, 0, 0, 0, 0, };    // ( Enemy | Loot | Block | Empty | Shop )
+    [SerializeField] private int[] maxCardsTypeCount = { 6, 9, 1, 3, 0, }; // ( Enemy | Loot | Block | Empty | Shop )
+    [SerializeField] private int[] cardsTypeCount = { 0, 0, 0, 0, 0, };    // ( Enemy | Loot | Block | Empty | Shop )
 
     public void Make(int x, int y, Vector2 pos, int typeID = -1, int itemID = -1)
     {
         if (itemID != -1)
         {
             var loot = Game.Data.LootList[itemID]; // Minus not spawned element they was last
-            Spawn(x, y, pos, loot, 1);
+            Game.singletone.GameStateInGame.Spawn(x, y, pos, loot, 1);
+            cardsTypeCount[typeID]++;
             return;
         }
         while (typeID == -1)
@@ -38,7 +38,16 @@ public class FactoryCard : FactoryBase
         {
             infoCard = MakeInfo(typeID);
         }
-        Spawn(x, y, pos, infoCard, typeID);
+        Game.singletone.GameStateInGame.Spawn(x, y, pos, infoCard, typeID);
+        cardsTypeCount[typeID]++;
+    }
+    public void OnCardDie(string type)
+    {
+        cardsTypeCount[typeCardId[type]]--;
+    }
+    public void OnGameEnd()
+    {
+        Array.Clear(cardsTypeCount, 0, cardsTypeCount.Length);
     }
 
     public InfoCard MakeInfo(int typeID)
@@ -58,13 +67,6 @@ public class FactoryCard : FactoryBase
         }
         return Game.Data.EmptyList[0];
     }
-    private void Spawn(int x, int y, Vector2 pos, InfoCard infoCard, int typeID = -1)
-    {
-        if (Game.ControllerField.Field[x, y]) GameObject.Destroy(Game.ControllerField.Field[x, y].gameObject);
-        var card = GameObject.Instantiate(cardsPrefab[typeID], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
-        Game.ControllerField.Field[x, y] = card.GetComponent<CardBase>();
-        Game.ControllerField.Field[x, y].Load(infoCard, x, y);
-    }
     private bool IsSpawned(InfoCard infoCard)
     {
         if (infoCard.spawned) return true;
@@ -72,7 +74,7 @@ public class FactoryCard : FactoryBase
     }
     private bool CheckRules(int typeId)
     {
-        if (cardsTypeCount[typeId] > maxCardsTypeCount[typeId])
+        if (cardsTypeCount[typeId] >= maxCardsTypeCount[typeId])
         {
             return false;
         }

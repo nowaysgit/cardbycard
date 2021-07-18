@@ -10,6 +10,7 @@ public class Item : MonoBehaviour
     public int Slot;
     public bool IsClick;
     public int Kd;
+    public bool InInventory;
 
     [HideInInspector]
     public InfoItem Info { get; private set; }
@@ -18,7 +19,7 @@ public class Item : MonoBehaviour
 
     private void Awake()
     {
-        Game.ControllerField.OnMoved.AddListener(isMoved);
+        Game.singletone.OnPlayerMoved.AddListener(isMoved);
         ability = GameObject.FindGameObjectWithTag("GameController").GetComponent<Ability>();
         weapon = GameObject.FindGameObjectWithTag("GameController").GetComponent<Weapon>();
         Count = 1;
@@ -52,7 +53,12 @@ public class Item : MonoBehaviour
         if(Kd != 0)
         {
             Kd--;
+            Game.UIManager.UIInventory.UpdateKd(Slot, Kd, Info.kd);
         }
+    }
+    private void OnDestroy()
+    {
+        Game.singletone.OnPlayerMoved.RemoveListener(isMoved);
     }
 
 }

@@ -22,6 +22,7 @@ public class InfoItem
     public string spriteName;
     public int cost;
     public int lvl;
+    public string description;
 }
 [System.Serializable]
 public class InfoCard

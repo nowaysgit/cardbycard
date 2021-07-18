@@ -20,13 +20,11 @@ public class CardShop : CardBase
     }
     public override void Die()
     {
-        IsBlocked = true;
+        base.Die();
         for (int i = 0; i < 3; i++)
         {
             inventory.Remove(i);
         }
-        OnDied.Invoke();
-        Instantiate(FxDie, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
     public void GenerateItems()
@@ -40,7 +38,7 @@ public class CardShop : CardBase
             item.gameObject.transform.SetParent(gameObject.transform);
             item.Slot = slot;
             inventory.Add(item, slot);
-            Game.UIManager.UILoot.UpdateInventory("Add", slot, item, true);
+            Game.UIManager.UILoot.UpdateInventory("Add", slot, item);
             slot++;
         }
     }

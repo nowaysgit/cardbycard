@@ -17,7 +17,6 @@ public class UILoot : UIInventory
     private Button[] buttons;
     private float pxSize = 40;
     private Text uiName;
-    private bool isShop;
 
     [Header("Items List")]
     public Item[] Items;
@@ -46,48 +45,28 @@ public class UILoot : UIInventory
     {
         gameObject.SetActive(false);
     }
-    private bool playerAdd(Item item, int slot, int cost = 0)
-    {
-        if (cost > 0)
-        {
-            if (Game.ControllerField.Player.Money >= cost)
-            {
-                if (item.Info.type == "Disposable") return Game.ControllerField.Player.Inventory.Add(item);
-                else Game.ControllerField.Player.InventoryBackpack.Add(item.Info.id); return true;
-            }
-            else return false;
-        }
-        else
-        {
-            return Game.ControllerField.Player.Inventory.Add(item);
-        }
-    }
     public override void OnClick(int slot = 0)
     {
         if (Items[slot] != null)
         {
-            var cost = 0;
-            if (isShop) cost = Items[slot].Info.cost;
-            if (playerAdd(Items[slot], slot, cost))
+            var item = Items[slot];
+            if (item.Info.type == "Money") 
             {
-                Game.ControllerField.Player.Money -= cost;
-                UpdateInventory("Remove", slot);
+                Game.singletone.Player.Money+=item.Info.cost;
             }
+            else if (item.Info.type == "Disposable") 
+            {
+                Game.singletone.Player.Inventory.Add(item);
+            }
+            else 
+            {
+                Game.singletone.Player.InventoryEquipment.Add(item.Info);
+            }
+            UpdateInventory("Remove", slot);
         }
-        if (isShop) { UpdateButtons(); }
         if (Count <= 0) gameObject.SetActive(false);
     }
-    private void UpdateButtons()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            if (Items[i] != null)
-            {
-                if (Items[i].Info.cost > Game.ControllerField.Player.Money) { buttons[i].interactable = false; }
-            }
-        }
-    }
-    public override void UpdateInventory(string act, int slot = 0, Item item = null, bool IsShop = false, string UiName = "Corpse")
+    public override void UpdateInventory(string act, int slot = 0, Item item = null, string UiName = "Corpse")
     {
         switch (act)
         {
@@ -98,20 +77,10 @@ public class UILoot : UIInventory
                     buttons[slot].interactable = true;
                     Slots[slot].gameObject.SetActive(true);
                     Slots[slot].gameObject.transform.parent.gameObject.GetComponent<Image>().color = itemColor;
-                    isShop = IsShop;
+
                     Slots[slot].gameObject.transform.GetChild(0).GetComponent<Text>().text = item.Info.title.ToString();
                     Slots[slot].gameObject.transform.GetChild(0).gameObject.SetActive(true);
-                    if (isShop)
-                    {
-                        Slots[slot].gameObject.transform.GetChild(1).gameObject.SetActive(true);
-                        Slots[slot].gameObject.transform.GetChild(2).gameObject.SetActive(true);
-                        Slots[slot].gameObject.transform.GetChild(2).GetComponent<Text>().text = item.Info.cost.ToString();
-                    }
-                    else
-                    {
-                        Slots[slot].gameObject.transform.GetChild(1).gameObject.SetActive(false);
-                        Slots[slot].gameObject.transform.GetChild(2).gameObject.SetActive(false);
-                    }
+
                     Slots[slot].sprite = Resources.Load<Sprite>(item.Info.spriteName);
                     Items[slot] = item;
                     Slots[slot].gameObject.transform.parent.gameObject.SetActive(true);
@@ -133,7 +102,6 @@ public class UILoot : UIInventory
                         OnClick(slot);
                         Destroy(coin, 1.7f);
                     }
-                    if (isShop) { UpdateButtons(); }
                 }
                 break;
             case "Remove":
@@ -142,8 +110,6 @@ public class UILoot : UIInventory
                     Slots[slot].gameObject.transform.parent.gameObject.GetComponent<Image>().color = emptyColor;
                     Items[slot] = null;
                     Slots[slot].gameObject.transform.GetChild(0).gameObject.SetActive(false);
-                    Slots[slot].gameObject.transform.GetChild(1).gameObject.SetActive(false);
-                    Slots[slot].gameObject.transform.GetChild(2).gameObject.SetActive(false);
                     Count--;
                 }
                 break;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,17 +18,32 @@ public class UIManager : MonoBehaviour
     [Header("Inventory UI")]
     public UIInventory UIInventory;
     public UILoot UILoot;
-    public UIBackpack UIBackpack;
+
+    [Header("MainMenu")]
+    public GameObject MainMenu;
     
     public void OnGameRestart()
     {
         UIInventory.UpdateInventory("Clear");
         UILoot.UpdateInventory("Clear");
-        UIBackpack.ReloadAll();
         DiePanel.SetActive(false);
     }
     public void OnPlayerRespawn()
     {
         DiePanel.SetActive(false);
+    }
+    public void UpdateHealthBar(float amount)
+    {
+        TextHealth.text = Convert.ToString(Mathf.Round(amount)); 
+        SliderHealth.value = amount; 
+    }
+    public void UpdateManaBar(float amount)
+    {
+        TextMana.text = Convert.ToString(Mathf.Round(amount)); 
+        SliderMana.value = amount; 
+    }
+    public void UpdateMoney(int amount)
+    {
+        TextMoney.text = Convert.ToString(amount);
     }
 }

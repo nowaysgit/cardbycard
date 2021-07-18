@@ -35,7 +35,7 @@ public abstract class CardBase : MonoBehaviour, ICard
     
     public virtual void Awake()
     {
-        Game.ControllerField.OnMoved.AddListener(isMoved);
+        Game.singletone.OnPlayerMoved.AddListener(isMoved);
         sprite = GetComponent<SpriteRenderer>();
         textHealth = this.gameObject.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>();
         Instantiate(FxInstance, transform.position, Quaternion.identity);
@@ -45,7 +45,7 @@ public abstract class CardBase : MonoBehaviour, ICard
         EventTrigger trigger = GetComponent<EventTrigger>( );
 		EventTrigger.Entry entry = new EventTrigger.Entry( );
 		entry.eventID = EventTriggerType.PointerDown;
-		entry.callback.AddListener( (data) => { Game.ControllerField.isCardClick( this.gameObject ); } );
+		entry.callback.AddListener( (data) => { Game.singletone.GameStateInGame.isCardClick( this.gameObject ); } );
 		trigger.triggers.Add( entry );
     }
     public virtual void OnAwake() //overridden by heirs and called after Awake
@@ -79,8 +79,8 @@ public abstract class CardBase : MonoBehaviour, ICard
     {
         IsBlocked = true;
         OnDied.Invoke();
+        Game.singletone.OnCardDie.Invoke(Info.type);
         Instantiate(FxDie, transform.position, Quaternion.identity);
-        Destroy(gameObject);
     }
     public virtual void isMoved() //overridden by heirs and called after player change position
     {

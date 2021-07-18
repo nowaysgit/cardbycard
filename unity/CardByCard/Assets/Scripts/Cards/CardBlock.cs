@@ -31,9 +31,7 @@ public class CardBlock : CardBase
     }
     public override void Die()
     {
-        IsBlocked = true;
-        OnDied.Invoke();
-        Instantiate(FxDie, transform.position, Quaternion.identity);
+        base.Die();
         Game.FactoryCard.Make(possition.x, possition.y, new Vector2(transform.position.x, transform.position.y));
         Destroy(gameObject);
     }

@@ -1,0 +1,142 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
+using Game = GameManager;
+
+public class GameStateInGame : GameState
+{
+    [Header("Settings, fieldSize is = fieldSize*fieldSize")]
+    [SerializeField] private int fieldSize;
+    [SerializeField] private int cardSize;
+
+    [Header("Player Prefab")]
+    [SerializeField] private GameObject playerPrefab;
+
+    [Header("Cards Prefabs")]
+    [SerializeField] private GameObject[] cardsPrefab;
+
+    [Header("Player Info")]
+    public Vector2Int PlayerPossition = new Vector2Int(0, 0);
+    public int NumMovesInGame { get; private set; }
+    
+    public GameObject LastCardClick;
+
+    [Header("Flied")]
+    public CardBase[,] Field;
+    public override void Enter()
+    {
+        Game.singletone.OnPlayerMoved.AddListener(IsMoved);
+        Field = new CardBase[fieldSize, fieldSize];
+        NumMovesInGame = 0;
+        PlayerPossition = new Vector2Int(0, 0);
+        GenerateField();
+
+        Game.singletone.OnGameRestart.Invoke();
+    }
+    public override void Exit()
+    {
+        Game.singletone.OnGameEnd.Invoke();
+        Game.singletone.OnPlayerMoved.RemoveListener(IsMoved);
+        ClearField();
+    }
+    public void OnPlayerRespawn()
+    {
+        Game.singletone.Player.Load(1000, 100, Game.singletone.Player.Damage, "Character1");
+        Game.singletone.OnPlayerRespawn.Invoke();
+    }
+    public void TouchEventStart(Vector2 vector) // LEAN
+    {
+        var normalized = vector.normalized;
+        Game.singletone.Player.Control.TryMove(Convert.ToInt32(normalized.x), Convert.ToInt32(normalized.y));
+    }
+    private void IsMoved()
+    {
+        NumMovesInGame++;
+    }
+    public void isCardClick(GameObject card) // Called when player Click on card
+    {
+        LastCardClick = card;
+        Game.singletone.OnCardClick.Invoke();
+    }
+    private void ClearField()
+    {
+        for (int i = 0; i < fieldSize; i++)
+        {
+            for (int i2 = 0; i2 < fieldSize; i2++)
+            {
+                if (Field[i, i2] != null) Destroy(Field[i, i2].gameObject);
+            }
+        }
+    }
+    private void GenerateField()
+    {
+        ClearField();
+        var x = 0.0f;
+        var y = 0.0f;
+        for (int i = 0; i < fieldSize; i++)
+        {
+            x = 0.0f;
+            for (int i2 = 0; i2 < fieldSize; i2++)
+            {
+                if (PlayerPossition.x == i && PlayerPossition.y == i2)
+                {
+                    if (Game.singletone.Player == null)
+                    {
+                        Game.singletone.Player = (Instantiate(playerPrefab, new Vector3(x, y, -1), Quaternion.identity)).GetComponent<ControllerPlayer>();
+                        Game.singletone.Player.Load(100, 100, 3.0f, "Character1");
+                        Game.singletone.OnPlayerRespawn.Invoke();
+                    }
+                    else
+                    {
+                        Game.singletone.Player.Load(Game.singletone.Player.HealthMax, Game.singletone.Player.ManaMax, Game.singletone.Player.Damage, "Character1");
+                        Game.singletone.Player.Control.SetPossition(PlayerPossition.x, PlayerPossition.y);
+                    }
+                }
+                else
+                {
+                    Game.FactoryCard.Make(i, i2, new Vector3(x, y, 0));
+                }
+                x += (cardSize + 0.2f);
+            }
+            y += (cardSize + 0.2f);
+        }
+    }
+    public void Spawn(int x, int y, Vector2 pos, InfoCard infoCard, int typeID = -1)
+    {
+        if (Field[x, y]) GameObject.Destroy(Field[x, y].gameObject);
+        var card = GameObject.Instantiate(cardsPrefab[typeID], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+        Field[x, y] = card.GetComponent<CardBase>();
+        Field[x, y].Load(infoCard, x, y);
+    }
+    public bool CanMove(int x, int y, Vector2Int possition, out float getdamage)
+    {
+        getdamage = 0;
+        if (x != 0 && y != 0) return false;
+        int tryPossitionX = possition.x + x;
+        int tryPossitionY = possition.y + y;
+        if ((x != 0 && tryPossitionX >= 0 && tryPossitionX < 3) || (y != 0 && tryPossitionY >= 0 && tryPossitionY < 3))
+        {
+            if (Field[tryPossitionY, tryPossitionX] == null) return false; // X AND Y REVERSED <WHY>
+            bool canmove;
+            Field[tryPossitionY, tryPossitionX].Event(Game.singletone.Player.Control.interactive.Damage, out getdamage, out canmove); // X AND Y REVERSED <WHY>
+            return canmove;
+        }
+        return false;
+    }
+    public void TryMakeNewCard(Vector2Int possition, Vector3 transformposition)
+    {
+        if (Field[possition.y, possition.x] != null)
+        {
+            Field[possition.y, possition.x].Die();
+            Game.FactoryCard.Make(possition.y, possition.x, new Vector2(transformposition.x, transformposition.y));
+        }
+        else
+        {
+            Game.FactoryCard.Make(possition.y, possition.x, new Vector2(transformposition.x, transformposition.y));
+        }
+    }
+}

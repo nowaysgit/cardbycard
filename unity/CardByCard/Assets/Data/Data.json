@@ -133,7 +133,8 @@
             "typeAbility": "none",
             "spriteName": "Coin",
             "cost": 12,
-            "lvl": 0
+            "lvl": 0,
+            "description": "Moneys"
         },
         {
             "spawned": true,
@@ -146,7 +147,8 @@
             "typeAbility": "DisposableHeal",
             "spriteName": "ItemFullHeal",
             "cost": 12,
-            "lvl": 0
+            "lvl": 0,
+            "description": "Moneys"
         },
         {
             "spawned": true,
@@ -159,7 +161,8 @@
             "typeAbility": "DisposableHeal",
             "spriteName": "ItemHalfHeal",
             "cost": 6,
-            "lvl": 0
+            "lvl": 0,
+            "description": "Moneys"
         },
         {
             "spawned": true,
@@ -172,7 +175,8 @@
             "typeAbility": "DisposableHealMana",
             "spriteName": "ItemFullHealMana",
             "cost": 40,
-            "lvl": 1
+            "lvl": 1,
+            "description": "Moneys"
         },
         {
             "spawned": true,
@@ -185,7 +189,8 @@
             "typeAbility": "DisposableHealMana",
             "spriteName": "ItemHalfHealMana",
             "cost": 20,
-            "lvl": 1
+            "lvl": 1,
+            "description": "Moneys"
         },
 
 
@@ -201,11 +206,15 @@
             "stackable": false,
             "maxInStack": 1,
             "damage": 5,
+            "manaCost": 0,
             "type": "Weapon",
             "typeAbility": "none",
+            "attackMethod": "self",
+            "attackArea": "solo",
             "spriteName": "itemSword1",
             "cost": 12,
-            "lvl": 1
+            "lvl": 1,
+            "description": "Moneys"
         },
         {
             "spawned": false,
@@ -214,11 +223,15 @@
             "stackable": false,
             "maxInStack": 1,
             "damage": 6,
+            "manaCost": 0,
             "type": "Weapon",
             "typeAbility": "none",
+            "attackMethod": "self",
+            "attackArea": "solo",
             "spriteName": "itemSword2",
             "cost": 15,
-            "lvl": 2
+            "lvl": 2,
+            "description": "Moneys"
         },
 
 
@@ -239,7 +252,8 @@
             "attackArea": "solo",
             "spriteName": "abilityShield1",
             "cost": 20,
-            "lvl": 1
+            "lvl": 3,
+            "description": "Moneys"
         },
         {
             "spawned": false,
@@ -256,7 +270,8 @@
             "kd": 5,
             "spriteName": "fireball",
             "cost": 20,
-            "lvl": 3
+            "lvl": 1,
+            "description": "Moneys"
         },
         {
             "spawned": false,
@@ -273,7 +288,8 @@
             "kd": 5,
             "spriteName": "snowball",
             "cost": 20,
-            "lvl": 3
+            "lvl": 0,
+            "description": "Moneys"
         }
     ]
 }

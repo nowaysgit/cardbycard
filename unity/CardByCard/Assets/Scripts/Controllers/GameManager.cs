@@ -17,8 +17,21 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(UIManager))]
 [RequireComponent(typeof(UIAnimator))]
 
+[System.Serializable]
+public class IntEvent : UnityEvent<int> {}
+[System.Serializable]
+public class FloatEvent : UnityEvent<float> {}
+[System.Serializable]
+public class StringEvent : UnityEvent<string> {}
+
 public class GameManager : MonoBehaviour
 { 
+    [Header("Player")]
+    public ControllerPlayer Player;
+
+    [Header("Player Prefab")]
+    [SerializeField] private GameObject playerPrefab;
+
     [Header("Data")]
     [SerializeField] private TextAsset jsonFile;
     private bool isInitialized;
@@ -30,9 +43,58 @@ public class GameManager : MonoBehaviour
     public static UIManager UIManager { get; private set; }
     public static UIAnimator UIAnimator { get; private set; }
     public static GameManager singletone { get; private set; }
+
+    [Header("On Game Restart")]
     public UnityEvent OnGameRestart;
+
+
+    [Header("On Game Preparation")]
+    public UnityEvent OnGamePreparation;
+
+
+    [Header("On Game End")]
+    public UnityEvent OnGameEnd;
+
+
+    [Header("On Player Respawn")]
     public UnityEvent OnPlayerRespawn;
 
+
+    [Header("On Player Moved")]
+    public UnityEvent OnPlayerMoved;
+
+
+    [Header("On Player Money Spend")]
+    public IntEvent OnPlayerMoneySpend;
+
+
+    [Header("On Player Mana Spend")]
+    public FloatEvent OnPlayerManaSpend;
+
+
+    [Header("On Player Health Spend")]
+    public FloatEvent OnPlayerHealthSpend;
+
+
+    [Header("On Equipment Add")]
+    public IntEvent OnEquipmentAdd;
+
+
+    [Header("On Equipment Add")]
+    public IntEvent OnInventoryAdd;
+    
+
+
+    [Header("On Card Click")]
+    public UnityEvent OnCardClick;
+
+    [Header("On Card Die")]
+    public StringEvent OnCardDie;
+
+    public GameState CurrentState { get; private set; }
+    [SerializeField] public GameStateMainMenu GameStateMainMenu;
+    [SerializeField] public GameStatePreparation GameStatePreparation;
+    [SerializeField] public GameStateInGame GameStateInGame;
 
     private void Awake()
     {
@@ -52,23 +114,37 @@ public class GameManager : MonoBehaviour
         if(!isInitialized)
         {
             Data = JsonUtility.FromJson<Data>(jsonFile.text); // STATIC DATA
+            Player = (Instantiate(playerPrefab, new Vector3(0, 0, -1), Quaternion.identity)).GetComponent<ControllerPlayer>();
+            Player.Load(200, 100, 10.0f, "Character1");
+
             FactoryItem = gameObject.GetComponent<FactoryItem>();
             FactoryCard = gameObject.GetComponent<FactoryCard>();
             UIManager = gameObject.GetComponent<UIManager>();
             UIAnimator = gameObject.GetComponent<UIAnimator>();
-            ControllerField = gameObject.GetComponent<ControllerField>();
 
-            OnGameRestart.AddListener(ControllerField.OnGameRestart);
             OnGameRestart.AddListener(UIManager.OnGameRestart);
-
-            OnPlayerRespawn.AddListener(ControllerField.OnPlayerRespawn);
             OnPlayerRespawn.AddListener(UIManager.OnPlayerRespawn);
+            OnCardDie.AddListener(FactoryCard.OnCardDie);
+            OnGameEnd.AddListener(FactoryCard.OnGameEnd);
+
+            OnPlayerHealthSpend.AddListener(UIManager.UpdateHealthBar);
+            OnPlayerManaSpend.AddListener(UIManager.UpdateManaBar);
+            OnPlayerMoneySpend.AddListener(UIManager.UpdateMoney);
+
+            CurrentState = GameStateMainMenu;
+            CurrentState.Enter();
             isInitialized = true;
         }
     }
-    public void GameRestart() 
+    public void NextState()
     {
-        OnGameRestart.Invoke();
+        ChangeState(CurrentState.NextState);
+    }
+    public void ChangeState(GameState newState)
+    {
+        CurrentState.Exit();
+        CurrentState = newState;
+        newState.Enter();
     }
     public void PlayerRespawn() 
     {
