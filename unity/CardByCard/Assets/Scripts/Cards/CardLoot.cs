@@ -9,17 +9,18 @@ public class CardLoot : CardBase
 {
     [Header("Inventory Class")]
     public InventoryLoot Inventory;
-    public override void Event(float getdamage, out float givedamage, out bool canmove)
+    public override float Event(float getdamage)
     {
-        if (IsBlocked) { givedamage = 0.0f; canmove = true; }
+        if (!Alive) { return 0.0f; }
         Game.UIManager.UILoot.gameObject.SetActive(true);
         GenerateItems();
-        canmove = true;
-        givedamage = 0.0f;
         sprite.sprite = Resources.Load<Sprite>(sprite.sprite.texture.name + "Open");
+        return 0.0f;
     }
     public override void Die()
     {
+        if(!Alive) return;
+        Game.UIManager.UILoot.gameObject.SetActive(false);
         base.Die();
         for (int i = 0; i < 3; i++)
         {

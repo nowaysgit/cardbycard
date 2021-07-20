@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ICard
 {
-    void Event(float getdamage, out float givedamage, out bool canmove);
-    bool Damage(float getdamage);
-    void Die();
+    public float Event(float getdamage);
+    public void SetDamage(float getdamage);
+    public void Die();
 }

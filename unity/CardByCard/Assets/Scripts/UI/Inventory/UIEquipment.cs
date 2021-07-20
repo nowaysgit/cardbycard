@@ -25,7 +25,6 @@ public class UIEquipment : MonoBehaviour
 
     protected InventoryEquipment inventoryEquipment;
     private int slotAbility = 0;
-    private bool isActive = false;
     private bool isInitialized = false;
 
     private Dictionary<int, GameObject> buttons = new Dictionary<int, GameObject>();

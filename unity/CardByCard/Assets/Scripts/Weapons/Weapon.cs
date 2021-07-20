@@ -7,14 +7,14 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public void UseWeapon(string abilityName, Item item, GameObject attacking = null, GameObject receiver = null)
+    public void UseWeapon(string abilityName, Item item, Interactive attacking = null, Interactive receiver = null)
     {
         Type thisType = this.GetType();
         MethodInfo theMethod = thisType.GetMethod(abilityName);
         theMethod.Invoke(this, new object[] { item, attacking, receiver });
     }
-    public void Attack(Item item, GameObject attacking = null, GameObject receiver = null)
+    public void Attack(Item item, Interactive attacking = null, Interactive receiver = null)
     {
-        receiver.GetComponent<Interactive>().Health-=item.Info.damage;
+        receiver.Health-=item.Info.damage;
     }
 }

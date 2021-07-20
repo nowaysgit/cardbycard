@@ -9,13 +9,12 @@ public class CardShop : CardBase
 {
     [Header("Inventory Class")]
     public InventoryLoot inventory;
-    public override void Event(float getdamage, out float givedamage, out bool canmove)
+    public override float Event(float getdamage)
     {
-        if(IsBlocked) { givedamage = 0.0f; canmove = true; }
+        if(IsBlocked) { return 0.0f; }
         Game.UIManager.UILoot.gameObject.SetActive(true);
         GenerateItems();
-        canmove = true;
-        givedamage = 0.0f;
+        return 0.0f;
         //sprite.sprite = Resources.Load<Sprite>(sprite.sprite.texture.name+"Open");
     }
     public override void Die()

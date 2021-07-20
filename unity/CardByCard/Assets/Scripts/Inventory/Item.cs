@@ -28,7 +28,7 @@ public class Item : MonoBehaviour
     {
         Info = Game.Data.CopyFromSerialize<InfoItem>(_info);
     }
-    public void Event(GameObject attacking, GameObject receiver)
+    public void Event(Interactive attacking, Interactive receiver)
     {
         switch (Info.type)
         {
@@ -45,7 +45,7 @@ public class Item : MonoBehaviour
         {
             ability.UseAbility(Info.typeAbility, this, attacking, receiver);
         }
-        if (Count < 1) { Game.UIManager.UIInventory.UpdateInventory("Remove", Slot, this); Destroy(gameObject); }
+        if (Count < 1) { Game.singletone.OnInventoryRemove.Invoke(Slot); Destroy(gameObject); }
     }
     //5/5 0/5
     private void isMoved() //overridden by heirs and called after player change position

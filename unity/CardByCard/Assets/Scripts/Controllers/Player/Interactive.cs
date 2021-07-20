@@ -23,18 +23,20 @@ public class Interactive : MonoBehaviour
     public virtual bool Alive { get; protected set; }
     public float ManaCost = 0.0f;
 
+    [Header("On Died")] 
     public UnityEvent OnDied;
-    public virtual void SetDamage(float _getdamage)
+
+    public virtual void SetDamage(float getdamage)
     {
         if(!Alive) return;
         if (Shield > 0.00f) {
-            float damaged = Convert.ToSingle(Math.Round(_getdamage*Shield, 2)); 
-            Health = Convert.ToSingle(Math.Round(Health-(_getdamage-damaged), 2));  
+            float damaged = Convert.ToSingle(Math.Round(getdamage*Shield, 2)); 
+            Health = Convert.ToSingle(Math.Round(Health-(getdamage-damaged), 2));  
             Mana = Convert.ToSingle(Math.Round(Mana-ManaCost, 2));
         }
         else
         {
-            Health-= _getdamage;  
+            Health-= getdamage;  
         }
         if (Health<=0) 
         {
@@ -42,20 +44,45 @@ public class Interactive : MonoBehaviour
             Alive = false;
         }
     }
-    public virtual void SetMana(float _getmana)
+    public virtual void SetMana(float getmana)
     {
         if(!Alive) return;
-        if (Mana-_getmana <= 0 )
+        if (Mana-getmana <= 0 )
         {
             Mana = 0;
         }
         else
         {
-            Mana = Convert.ToSingle(Math.Round(Mana-_getmana, 2));
+            Mana = Convert.ToSingle(Math.Round(Mana-getmana, 2));
         }        
+    }
+    public virtual void SetHealHealth(float getdamage)
+    {
+        if(!Alive) return;
+        if (Health+getdamage >= HealthMax) 
+        {
+            Health = HealthMax;
+        }
+        else
+        {
+            Health+= getdamage;  
+        }
+    }
+    public virtual void SetHealMana(float getmana)
+    {
+        if(!Alive) return;
+        if (Mana+getmana >= ManaMax) 
+        {
+            Mana = ManaMax;
+        }
+        else
+        {
+            Mana+= getmana;  
+        }      
     }
     public virtual void Die()
     {
+        if(!Alive) return;
         Destroy(gameObject);
     }
 }

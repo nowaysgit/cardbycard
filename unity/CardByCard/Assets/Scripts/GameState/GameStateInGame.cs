@@ -22,8 +22,8 @@ public class GameStateInGame : GameState
     [Header("Player Info")]
     public Vector2Int PlayerPossition = new Vector2Int(0, 0);
     public int NumMovesInGame { get; private set; }
-    
-    public GameObject LastCardClick;
+
+    public CardBase LastCardClick;
 
     [Header("Flied")]
     public CardBase[,] Field;
@@ -57,7 +57,7 @@ public class GameStateInGame : GameState
     {
         NumMovesInGame++;
     }
-    public void isCardClick(GameObject card) // Called when player Click on card
+    public void isCardClick(CardBase card) // Called when player Click on card
     {
         LastCardClick = card;
         Game.singletone.OnCardClick.Invoke();
@@ -121,8 +121,8 @@ public class GameStateInGame : GameState
         if ((x != 0 && tryPossitionX >= 0 && tryPossitionX < 3) || (y != 0 && tryPossitionY >= 0 && tryPossitionY < 3))
         {
             if (Field[tryPossitionY, tryPossitionX] == null) return false; // X AND Y REVERSED <WHY>
-            bool canmove;
-            Field[tryPossitionY, tryPossitionX].Event(Game.singletone.Player.Control.interactive.Damage, out getdamage, out canmove); // X AND Y REVERSED <WHY>
+            var canmove = Field[tryPossitionY, tryPossitionX].Info.canMove;
+            getdamage = Field[tryPossitionY, tryPossitionX].Event(Game.singletone.Player.Control.interactive.Damage); // X AND Y REVERSED <WHY>
             return canmove;
         }
         return false;
@@ -138,5 +138,36 @@ public class GameStateInGame : GameState
         {
             Game.FactoryCard.Make(possition.y, possition.x, new Vector2(transformposition.x, transformposition.y));
         }
+    }
+
+    public bool CanSpawnBlock(int x, int y)
+    {
+        /*
+        0,2  1,2  2,2
+        0,1  1,1  2,1
+        0,0  1,0  2,0  
+
+        0,1 + 1,0 = 1,1 (2) LEFT DOWN
+        0,1 + 1,2 = 1,3 (4) LEFT UP
+        1,2 + 2,1 = 3,3 (6) RIGHT UP
+        2,1 + 1,0 = 3,1 (4) RIGHT DOWN
+        */
+        if((x == 0 && y == 1) && ((Field[x+1,y-1] && Field[x+1,y-1].Info.type == "Block") || (Field[x+1,y+1] && Field[x+1,y+1].Info.type == "Block"))) // 0,1 UP OR DOWN
+        {
+            return false;
+        }
+        else if((x == 2 && y == 1) && ((Field[x-1,y-1] && Field[x-1,y-1].Info.type == "Block") || (Field[x-1,y+1] && Field[x-1,y+1].Info.type == "Block"))) // 2,1 UP OR DOWN
+        {
+            return false;
+        }
+        else if((x == 1 && y == 0) && ((Field[x+1,y+1] && Field[x+1,y+1].Info.type == "Block") || (Field[x-1,y+1] && Field[x-1,y+1].Info.type == "Block"))) // 1,0 RIGHT OR LEFT
+        {
+            return false;
+        }
+        else if((x == 1 && y == 2) && ((Field[x+1,y-1] && Field[x+1,y-1].Info.type == "Block") || (Field[x-1,y-1] && Field[x-1,y-1].Info.type == "Block"))) // 1,2 RIGHT OR LEFT
+        {
+            return false;
+        }
+        return true;
     }
 }

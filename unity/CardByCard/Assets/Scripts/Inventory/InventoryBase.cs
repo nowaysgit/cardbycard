@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game = GameManager;
 
 public abstract class InventoryBase : MonoBehaviour
 {
@@ -18,8 +19,7 @@ public abstract class InventoryBase : MonoBehaviour
     protected bool isEmpty(int _slot)
     {
         if (_slot == -1) _slot = lastSlot;
-        if (Items.ContainsKey(_slot)) return false;
-        return true;
+        return (!Items.ContainsKey(_slot));
     }
     public virtual bool Add(Item _item, int _slot = -1)
     {
@@ -34,11 +34,11 @@ public abstract class InventoryBase : MonoBehaviour
         if (isEmpty(_slot)==true) return;
         Items.Remove(_slot);
     }
-    public virtual void Use(int _slot, GameObject _receiver)
+    public virtual void Use(int _slot, Interactive _receiver)
     {
         if (isEmpty(_slot)) return;
         if (!Items[_slot]) return;
-        Items[_slot].Event(gameObject, _receiver);
+        Items[_slot].Event(Game.singletone.Player, _receiver);
     }
 }
 

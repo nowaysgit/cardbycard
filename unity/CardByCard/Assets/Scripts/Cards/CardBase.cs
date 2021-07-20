@@ -12,7 +12,7 @@ using Game = GameManager;
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(EventTrigger))]
 
-public abstract class CardBase : MonoBehaviour, ICard
+public abstract class CardBase : Interactive, ICard
 {
     [Header("FX")]
     public GameObject FxInstance;
@@ -30,8 +30,6 @@ public abstract class CardBase : MonoBehaviour, ICard
     protected SpriteRenderer sprite;
     protected TextMeshPro textName;
     protected TextMeshPro textHealth;
-    [Header("On Died")]
-    public UnityEvent OnDied;
     
     public virtual void Awake()
     {
@@ -40,12 +38,12 @@ public abstract class CardBase : MonoBehaviour, ICard
         textHealth = this.gameObject.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>();
         Instantiate(FxInstance, transform.position, Quaternion.identity);
         OnAwake();
-        IsBlocked = false;
+        Alive = true;
 
         EventTrigger trigger = GetComponent<EventTrigger>( );
 		EventTrigger.Entry entry = new EventTrigger.Entry( );
 		entry.eventID = EventTriggerType.PointerDown;
-		entry.callback.AddListener( (data) => { Game.singletone.GameStateInGame.isCardClick( this.gameObject ); } );
+		entry.callback.AddListener( (data) => { Game.singletone.GameStateInGame.isCardClick( this ); } );
 		trigger.triggers.Add( entry );
     }
     public virtual void OnAwake() //overridden by heirs and called after Awake
@@ -58,26 +56,37 @@ public abstract class CardBase : MonoBehaviour, ICard
         possition = new Vector2Int (x, y); 
         this.gameObject.transform.GetChild(0).gameObject.GetComponent<TextMesh>().text = Info.title;
         sprite.sprite = Resources.Load<Sprite>(Info.spriteName);
+
+        HealthMax = Info.maxHealth;
+        ManaMax = Info.maxMana;
+        Mana = Info.mana;
+        Health = Info.health;
+        Damage = Info.damage;
     }
 
-    public virtual void Event(float getdamage, out float givedamage, out bool canmove)
+    public virtual float Event(float getdamage) //RETURN DAMAGE
     {
-        if(IsBlocked) { givedamage = 0.0f; canmove = false; }
-        givedamage = 0.0f;
-        canmove = true;
+        if(!Alive) { return 0.0f; }
+        if (Health <= 0) 
+        { 
+            Die(); 
+        }
+        return 0.0f;
     }
-    public virtual bool Damage(float getdamage)
+    public override void SetDamage(float getdamage)
     {
-        GameObject FxAttack = (GameObject)Instantiate(AttackFXPrefab) as GameObject;
-        FxAttack.GetComponent<TextMesh>().text = Convert.ToString(getdamage);
-        Info.health-= getdamage;
-        textHealth.text = Convert.ToString(Info.health);
-        return (Info.health > 0);
+        if(!Alive) return;
+        Health -= getdamage;
+        textHealth.text = Convert.ToString(Health);
+
+        GameObject fxAttack = (GameObject)Instantiate(AttackFXPrefab, transform.position, Quaternion.identity) as GameObject;
+        fxAttack.GetComponent<TextMesh>().text = Convert.ToString(getdamage);
     }
 
-    public virtual void Die()
+    public override void Die()
     {
-        IsBlocked = true;
+        if(!Alive) return;
+        Alive = false;
         OnDied.Invoke();
         Game.singletone.OnCardDie.Invoke(Info.type);
         Instantiate(FxDie, transform.position, Quaternion.identity);

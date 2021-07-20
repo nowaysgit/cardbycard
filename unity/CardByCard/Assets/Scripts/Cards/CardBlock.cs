@@ -13,24 +13,28 @@ public class CardBlock : CardBase
     {
         HealthBar.localScale = new Vector3(0.7f, 1f, 1f);
     }
-    public override void Event(float getdamage, out float givedamage, out bool canmove)
+    public override float Event(float getdamage)
     {
-        if(IsBlocked) { givedamage = 0.0f; canmove = true; }
-        canmove = false;
-        givedamage = 0.0f;
+        if (!Alive) { return 0.0f; }
+        return 0.0f;
     }
-    public override bool Damage(float getdamage)
+    public override void SetDamage(float getdamage)
     {
-        Info.health -= getdamage;
-        HealthBar.localScale = new Vector3((0.7f/Info.maxHealth)*Info.health, 1f, 1f);
-        return (Info.health <= 0);
+        if(!Alive) return;
+        Health -= getdamage;
+        HealthBar.localScale = new Vector3((0.7f /HealthMax) * Health, 1f, 1f);
     }
     public override void isMoved()
     {
-        if (Damage(1)) Die();
+        SetDamage(1);
+        if (Health <= 0)
+        {
+            Die();
+        }
     }
     public override void Die()
     {
+        if(!Alive) return;
         base.Die();
         Game.FactoryCard.Make(possition.x, possition.y, new Vector2(transform.position.x, transform.position.y));
         Destroy(gameObject);

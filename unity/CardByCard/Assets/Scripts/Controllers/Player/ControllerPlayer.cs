@@ -16,7 +16,6 @@ public class ControllerPlayer : Interactive
         set
         {
             health = value;
-            Game.singletone.OnPlayerHealthSpend.Invoke(health);
         }
 
     }
@@ -26,7 +25,6 @@ public class ControllerPlayer : Interactive
         set
         {
             mana = value;
-            Game.singletone.OnPlayerManaSpend.Invoke(mana);
         }
     }
     public int Money
@@ -69,6 +67,10 @@ public class ControllerPlayer : Interactive
             isInitialized = true;
         }
     }
+    private void Start() 
+    {
+        Game.singletone.OnPlayerRespawn.Invoke();
+    }
     private void SetSprite(string _spritename)
     {
         sprite.sprite = Resources.Load<Sprite>(_spritename);
@@ -92,21 +94,64 @@ public class ControllerPlayer : Interactive
         {
             float damaged = Convert.ToSingle(Math.Round(getdamage * Shield, 2));
             Health = Convert.ToSingle(Math.Round(Health - (getdamage - damaged), 2));
+            Game.singletone.OnPlayerHealthSpend.Invoke(Health, -(getdamage - damaged));
             Mana = Convert.ToSingle(Math.Round(Mana - ManaCost, 2));
             fxAttack.GetComponent<TextMesh>().text = Convert.ToString((getdamage - damaged) + "(" + damaged + ")");
         }
         else
         {
             Health -= getdamage;
+            Game.singletone.OnPlayerHealthSpend.Invoke(Health, -getdamage);
             fxAttack.GetComponent<TextMesh>().text = Convert.ToString(getdamage);
         }
         if (Health <= 0)
         {
             Health = 0;
             Alive = false;
+            Game.singletone.OnPlayerHealthSpend.Invoke(0, -getdamage);
             OnDied.Invoke();
             Game.UIManager.DiePanel.SetActive(true);
         }
+    }
+    public override void SetMana(float getmana)
+    {
+        if(!Alive) return;
+        if (Mana-getmana <= 0 )
+        {
+            Mana = 0;
+        }
+        else
+        {
+            Mana = Convert.ToSingle(Math.Round(Mana-getmana, 2));
+            Game.singletone.OnPlayerManaSpend.Invoke(Mana, getmana);
+        }     
+        Game.singletone.OnPlayerManaSpend.Invoke(Mana, -getmana);   
+    }
+    public override void SetHealHealth(float getdamage)
+    {
+        if(!Alive) return;
+        if (Health+getdamage >= HealthMax) 
+        {
+            Health = HealthMax;
+        }
+        else
+        {
+            Health+= getdamage;  
+        }
+        Game.singletone.OnPlayerHealthSpend.Invoke(Health, getdamage);
+    }
+    public override void SetHealMana(float getmana)
+    {
+        if(!Alive) return;
+        if (Mana+getmana >= ManaMax) 
+        {
+            Mana = ManaMax;
+        }
+        else
+        {
+            Mana+= getmana;  
+        }   
+        Game.singletone.OnPlayerHealthSpend.Invoke(Health, getmana);   
     }
     public override void Die()
     {

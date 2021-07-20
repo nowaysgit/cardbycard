@@ -23,6 +23,10 @@ public class IntEvent : UnityEvent<int> {}
 public class FloatEvent : UnityEvent<float> {}
 [System.Serializable]
 public class StringEvent : UnityEvent<string> {}
+[System.Serializable]
+public class TwoFloatEvent : UnityEvent<float, float> {}
+[System.Serializable]
+public class TwoIntEvent : UnityEvent<int, int> {}
 
 public class GameManager : MonoBehaviour
 { 
@@ -35,8 +39,9 @@ public class GameManager : MonoBehaviour
     [Header("Data")]
     [SerializeField] private TextAsset jsonFile;
     private bool isInitialized;
-    
     [SerializeField] public static Data Data;
+    [SerializeField] private InfoItem[] DEBUGitemList;
+
     public static ControllerField ControllerField { get; private set; }
     public static FactoryItem FactoryItem { get; private set; }
     public static FactoryCard FactoryCard { get; private set; }
@@ -69,11 +74,11 @@ public class GameManager : MonoBehaviour
 
 
     [Header("On Player Mana Spend")]
-    public FloatEvent OnPlayerManaSpend;
+    public TwoFloatEvent OnPlayerManaSpend;
 
 
     [Header("On Player Health Spend")]
-    public FloatEvent OnPlayerHealthSpend;
+    public TwoFloatEvent OnPlayerHealthSpend;
 
 
     [Header("On Equipment Add")]
@@ -82,6 +87,10 @@ public class GameManager : MonoBehaviour
 
     [Header("On Equipment Add")]
     public IntEvent OnInventoryAdd;
+
+
+    [Header("On Inventory Remove")]
+    public IntEvent OnInventoryRemove;
     
 
 
@@ -90,6 +99,18 @@ public class GameManager : MonoBehaviour
 
     [Header("On Card Die")]
     public StringEvent OnCardDie;
+
+
+
+    [Header("On Ability Click")]
+    public IntEvent OnAbilityClick;
+
+    [Header("On Ability Use")]
+    public IntEvent OnAbilityUse;
+
+    [Header("On Ability Time")]
+    public TwoIntEvent OnAbilityTime;
+
 
     public GameState CurrentState { get; private set; }
     [SerializeField] public GameStateMainMenu GameStateMainMenu;
@@ -114,6 +135,7 @@ public class GameManager : MonoBehaviour
         if(!isInitialized)
         {
             Data = JsonUtility.FromJson<Data>(jsonFile.text); // STATIC DATA
+            DEBUGitemList = Data.ItemList;
             Player = (Instantiate(playerPrefab, new Vector3(0, 0, -1), Quaternion.identity)).GetComponent<ControllerPlayer>();
             Player.Load(200, 100, 10.0f, "Character1");
 
@@ -145,10 +167,6 @@ public class GameManager : MonoBehaviour
         CurrentState.Exit();
         CurrentState = newState;
         newState.Enter();
-    }
-    public void PlayerRespawn() 
-    {
-        OnPlayerRespawn.Invoke();
     }
     //OTHER FUNCTIONS
     public Color ParseStringColor(string rgbaColorToParse)

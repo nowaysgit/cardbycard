@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Game = GameManager;
 
 public class UIManager : MonoBehaviour
 {
@@ -30,14 +31,20 @@ public class UIManager : MonoBehaviour
     }
     public void OnPlayerRespawn()
     {
+        SliderHealth.maxValue = Game.singletone.Player.HealthMax;
+        SliderMana.maxValue = Game.singletone.Player.ManaMax;
+        SliderHealth.value = Game.singletone.Player.HealthMax;
+        SliderMana.value = Game.singletone.Player.ManaMax;
+        TextHealth.text = Game.singletone.Player.HealthMax.ToString();
+        TextMana.text = Game.singletone.Player.ManaMax.ToString();
         DiePanel.SetActive(false);
     }
-    public void UpdateHealthBar(float amount)
+    public void UpdateHealthBar(float amount, float amount2)
     {
         TextHealth.text = Convert.ToString(Mathf.Round(amount)); 
         SliderHealth.value = amount; 
     }
-    public void UpdateManaBar(float amount)
+    public void UpdateManaBar(float amount, float amount2)
     {
         TextMana.text = Convert.ToString(Mathf.Round(amount)); 
         SliderMana.value = amount; 

@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class CardEmpty : CardBase
 {
-    public override bool Damage(float getdamage)
+    public override float Event(float getdamage)
     {
-        return false;
+        if(!Alive) { return 0.0f; }
+        return 0.0f;
     }
 }

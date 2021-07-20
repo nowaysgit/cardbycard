@@ -10,7 +10,8 @@
             "mana": 100,
             "damage": 4,
             "spriteName": "Ogr1",
-            "lvl": 1
+            "lvl": 1,
+            "canMove": false
         },
         {
             "spawned": true,
@@ -23,7 +24,8 @@
             "mana": 100,
             "damage": 6,
             "spriteName": "Skeleton1",
-            "lvl": 2
+            "lvl": 2,
+            "canMove": false
         }
     ],
     "lootList": [{
@@ -34,7 +36,8 @@
             "color": "0.171, 0.000, 1.000, 1.000",
             "size": 2,
             "spriteName": "Chest1",
-            "lvl": 0
+            "lvl": 0,
+            "canMove": true
         },
         {
             "spawned": false,
@@ -44,7 +47,8 @@
             "color": "0.690, 0.970, 0.600, 1.000",
             "size": 2,
             "spriteName": "Chest1",
-            "lvl": 0
+            "lvl": 0,
+            "canMove": true
         }
     ],
     "blockList": [{
@@ -57,7 +61,8 @@
             "maxHealth": 5,
             "damage": 0,
             "spriteName": "Fence1",
-            "lvl": 1
+            "lvl": 1,
+            "canMove": false
         },
         {
             "spawned": true,
@@ -69,7 +74,8 @@
             "maxHealth": 10,
             "damage": 0,
             "spriteName": "Rock1",
-            "lvl": 2
+            "lvl": 2,
+            "canMove": false
         }
     ],
     "emptyList": [{
@@ -82,7 +88,8 @@
             "maxHealth": 0,
             "damage": 0,
             "spriteName": "Stones1",
-            "lvl": 0
+            "lvl": 0,
+            "canMove": true
         },
         {
             "spawned": true,
@@ -94,7 +101,8 @@
             "maxHealth": 0,
             "damage": 0,
             "spriteName": "Brush1",
-            "lvl": 0
+            "lvl": 0,
+            "canMove": true
         }
     ],
     "shopList": [{
@@ -107,7 +115,8 @@
         "maxHealth": 0,
         "damage": 0,
         "spriteName": "Shop1",
-        "lvl": 1
+        "lvl": 1,
+        "canMove": true
     },
     {
         "spawned": true,
@@ -119,7 +128,8 @@
         "maxHealth": 0,
         "damage": 0,
         "spriteName": "Shop1",
-        "lvl": 0
+        "lvl": 0,
+        "canMove": true
     }
     ],
     "itemList": [{
@@ -243,12 +253,12 @@
             "id": 7,
             "title": "Shield",
             "stackable": false,
-            "maxInStack": 1,
+            "maxInStack": 4,
             "damage": 0.1,
             "manaCost": 10,
             "type": "Ability",
             "typeAbility": "Shield",
-            "attackMethod": "self",
+            "attackMethod": "passive",
             "attackArea": "solo",
             "spriteName": "abilityShield1",
             "cost": 20,
@@ -283,7 +293,7 @@
             "manaCost": 20,
             "type": "Ability",
             "typeAbility": "SnowBall",
-            "attackMethod ": "choice",
+            "attackMethod": "choice",
             "attackArea": "solo",
             "kd": 5,
             "spriteName": "snowball",

@@ -16,19 +16,23 @@ public class FactoryCard : FactoryBase
     [SerializeField] private int[] maxCardsTypeCount = { 6, 9, 1, 3, 0, }; // ( Enemy | Loot | Block | Empty | Shop )
     [SerializeField] private int[] cardsTypeCount = { 0, 0, 0, 0, 0, };    // ( Enemy | Loot | Block | Empty | Shop )
 
+    public GameStateInGame GameStateInGame
+    {
+        get { return Game.singletone.GameStateInGame; }
+    }
     public void Make(int x, int y, Vector2 pos, int typeID = -1, int itemID = -1)
     {
         if (itemID != -1)
         {
             var loot = Game.Data.LootList[itemID]; // Minus not spawned element they was last
-            Game.singletone.GameStateInGame.Spawn(x, y, pos, loot, 1);
+            GameStateInGame.Spawn(x, y, pos, loot, 1);
             cardsTypeCount[typeID]++;
             return;
         }
         while (typeID == -1)
         {
             typeID = RandomRules(chanceCardProgression);
-            if (CheckRules(typeID) == false)
+            if (CheckRules(typeID, x, y) == false)
             {
                 typeID = -1;
             }
@@ -38,7 +42,7 @@ public class FactoryCard : FactoryBase
         {
             infoCard = MakeInfo(typeID);
         }
-        Game.singletone.GameStateInGame.Spawn(x, y, pos, infoCard, typeID);
+        GameStateInGame.Spawn(x, y, pos, infoCard, typeID);
         cardsTypeCount[typeID]++;
     }
     public void OnCardDie(string type)
@@ -72,11 +76,15 @@ public class FactoryCard : FactoryBase
         if (infoCard.spawned) return true;
         return false;
     }
-    private bool CheckRules(int typeId)
+    private bool CheckRules(int typeId, int x, int y)
     {
         if (cardsTypeCount[typeId] >= maxCardsTypeCount[typeId])
         {
             return false;
+        }
+        if (typeId == 2) // BLOCK CARD
+        {
+            return GameStateInGame.CanSpawnBlock(x, y);
         }
         return true;
     }

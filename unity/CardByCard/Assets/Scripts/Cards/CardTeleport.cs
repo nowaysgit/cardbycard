@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class CardTeleport : CardBase
 {
-    public override void Event(float getdamage, out float givedamage, out bool canmove)
+    public override float Event(float getdamage)
     {
         Debug.Log("TELEPORTED");
-        canmove = true;
-        givedamage = 0.0f;
+        return 0.0f;
     }
 }

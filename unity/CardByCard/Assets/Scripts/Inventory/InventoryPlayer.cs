@@ -9,10 +9,27 @@ using Game = GameManager;
 public class InventoryPlayer : InventoryBase
 {
     protected ControllerPlayer player;
+    private int ActiveChooseSlot;
     protected override void Awake()
     {
+        ActiveChooseSlot = -1;
         player = gameObject.GetComponent<ControllerPlayer>();
         lastSlot = Items.Count;
+        Game.singletone.OnGamePreparation.AddListener(ReloadInventory);
+    }
+    private void ReloadInventory()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            if (!isEmpty(i))
+            {
+                Items[i].Kd = 0;
+                if (Items[i].Info.type == "Disposable")
+                {
+                    Remove(i);
+                }
+            }
+        }
     }
     public override bool Add(Item item, int slot = -1)
     {
@@ -22,7 +39,13 @@ public class InventoryPlayer : InventoryBase
             for (int i = 0; i < 3; i++)
             {
                 if (!Items.ContainsKey(i) && !emptyFound) { slot = i; emptyFound = true; }
-                else if (Items.ContainsKey(i) && Items[i] == null && !emptyFound) { Items.Remove(i); Game.UIManager.UIInventory.UpdateInventory("Remove", i); slot = i; emptyFound = true; }
+                else if (Items.ContainsKey(i) && Items[i] == null && !emptyFound)
+                {
+                    Items.Remove(i);
+                    Game.singletone.OnInventoryRemove.Invoke(i);
+                    slot = i;
+                    emptyFound = true;
+                }
                 else if (Items.ContainsKey(i) && item.Info.id == Items[i].Info.id)
                 {
                     if (Items[i].Count < item.Info.maxInStack)
@@ -68,14 +91,17 @@ public class InventoryPlayer : InventoryBase
     }
     public override void Remove(int slot = -1)
     {
-        if (isEmpty(slot)) return;
+        if (isEmpty(slot)) 
+        {
+            return;
+        }
         if (Items[slot] != null)
         {
-            Destroy(Items[slot].gameObject);
             Items[slot].InInventory = false;
+            Destroy(Items[slot].gameObject);
         }
         Items.Remove(slot);
-        Game.UIManager.UIInventory.UpdateInventory("Remove", slot);
+        Game.singletone.OnInventoryRemove.Invoke(slot);
     }
     public void ChangeSlot(int slot, int toSlot)
     {
@@ -83,12 +109,12 @@ public class InventoryPlayer : InventoryBase
 
         var temp = Items[slot];
 
-        Game.UIManager.UIInventory.UpdateInventory("Remove", slot);
+        Game.singletone.OnInventoryRemove.Invoke(slot);
         if (Items.ContainsKey(toSlot) && Items[toSlot] != null)
         {
             Game.UIManager.UIInventory.UpdateInventory("Add", slot, Items[toSlot]);
         }
-        
+
         if (Items.ContainsKey(toSlot) && Items[toSlot] != null)
         {
             Items[slot] = Items[toSlot];
@@ -99,10 +125,10 @@ public class InventoryPlayer : InventoryBase
         }
         Items[toSlot] = temp;
 
-        Game.UIManager.UIInventory.UpdateInventory("Remove", toSlot);
+        Game.singletone.OnInventoryRemove.Invoke(toSlot);
         Game.UIManager.UIInventory.UpdateInventory("Add", toSlot, temp);
     }
-    public override void Use(int _slot, GameObject _attacker)
+    public override void Use(int _slot, Interactive _attacker)
     {
         if (isEmpty(_slot)) return;
         if (!Items[_slot]) return;
@@ -110,36 +136,63 @@ public class InventoryPlayer : InventoryBase
         {
             if (Items[_slot].Kd != 0)
             {
-                Debug.Log("KD: " + Items[_slot].Kd + "/" + Items[_slot].Info.kd);
                 return;
             }
+
             Items[_slot].IsClick = !Items[_slot].IsClick;
-            Debug.Log("isClick Status: " + Items[_slot].IsClick);
-            if (Items[_slot].IsClick)
+
+            Game.singletone.OnAbilityClick.Invoke(_slot);
+
+            if (Items[_slot].IsClick) //PRESSED SLOT ITEM IS ACTIVE
             {
+                if (ActiveChooseSlot != -1 && Items[ActiveChooseSlot].IsClick)
+                {
+                    Items[ActiveChooseSlot].IsClick = !Items[ActiveChooseSlot].IsClick;
+                    Game.singletone.OnAbilityClick.Invoke(ActiveChooseSlot);
+                    Game.singletone.OnCardClick.RemoveAllListeners();
+                }
                 Game.singletone.OnCardClick.AddListener(() => { AbilityStart(_slot); });
+                ActiveChooseSlot = _slot;
             }
-            else
+            else //PRESSED SLOT ITEM IS INACTIVE
             {
+                if (ActiveChooseSlot == _slot)
+                {
+                    ActiveChooseSlot = -1;
+                }
                 Game.singletone.OnCardClick.RemoveAllListeners();
             }
         }
+        else if (Items[_slot].Info.type == "Ability" && Items[_slot].Info.attackMethod == "passive")
+        {
+            if (Items[_slot].Kd != 0)
+            {
+                return;
+            }
+            Items[_slot].IsClick = !Items[_slot].IsClick;
+            Game.singletone.OnAbilityClick.Invoke(_slot);
+            
+            Items[_slot].Event(player, _attacker);
+        }
         else
         {
-            Items[_slot].Event(gameObject, _attacker);
+            Items[_slot].Event(player, _attacker);
         }
     }
     private void AbilityStart(int _slot)
     {
-        Debug.Log("AbilityStarted");
         if (isEmpty(_slot)) return;
         if (!Items[_slot]) return;
-        Items[_slot].Event(gameObject, Game.singletone.GameStateInGame.LastCardClick);
+        if (Game.singletone.GameStateInGame.LastCardClick.Info.type != "Enemy") return;
+
+        Items[_slot].Event(Game.singletone.Player, Game.singletone.GameStateInGame.LastCardClick);
+
         Items[_slot].Kd = Items[_slot].Info.kd;
         Game.UIManager.UIInventory.UpdateKd(_slot, Items[_slot].Info.kd, Items[_slot].Info.kd);
+
         Items[_slot].IsClick = false;
+        Game.singletone.OnAbilityClick.Invoke(_slot);
         Game.singletone.OnCardClick.RemoveAllListeners();
-        Debug.Log("isClick Status: " + Items[_slot].IsClick);
-        Debug.Log("KD: " + Items[_slot].Kd + "/" + Items[_slot].Info.kd);
+        ActiveChooseSlot = -1;
     }
 }

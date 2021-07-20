@@ -15,23 +15,29 @@ public class CardEnemy : CardBase
     {
         HealthBar.localScale = new Vector3(0.7f, 1f, 1f);
     }
-    public override void Event(float getdamage, out float givedamage, out bool canmove) //Move if die else get and give damage
+    public override float Event(float getdamage) //Move if die else get and give damage
     {
-        if(IsBlocked) { givedamage = 0.0f; canmove = true; }
-        var D = Damage(getdamage);
-        if (!D) { givedamage = Info.damage; } else { givedamage = 0.0f; }
-        canmove = D;
+        if(!Alive) { return 0.0f; }
+        SetDamage(getdamage);
+        if (Health <= 0)
+        { 
+            return 0.0f;
+        }
+        else
+        {
+            return Damage;
+        }
     }
-    public override bool Damage(float getdamage)
+    public override void SetDamage(float getdamage)
     {
-        if (IsBlocked) return true;
-        Info.health -= getdamage;
-        textHealth.text = Convert.ToString(Info.health);
-        GameObject fxAttack = (GameObject)Instantiate(AttackFXPrefab, transform.position, Quaternion.identity) as GameObject;
-        fxAttack.GetComponent<TextMesh>().text = Convert.ToString(getdamage);
-        if (Info.health <= 0) { Die(); return false; }
-        HealthBar.localScale = new Vector3((0.7f/Info.maxHealth)*Info.health, 1f, 1f);
-        return false;
+        if(!Alive) return;
+        base.SetDamage(getdamage);
+        HealthBar.localScale = new Vector3((Health/HealthMax)*0.7f, 1f, 1f);
+        //HealthBar.localScale = new Vector3((0.7f/HealthMax)*Health, 1f, 1f); 248 / 24
+        if (Health <= 0)
+        { 
+            Die(); 
+        }
     }
     public override void Die()
     {

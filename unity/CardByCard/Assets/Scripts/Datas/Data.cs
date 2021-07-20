@@ -35,10 +35,12 @@ public class InfoCard
     public float health;
     public float maxHealth;
     public float mana;
+    public float maxMana;
     public int size;
     public float damage;
     public string spriteName;
     public int lvl;
+    public bool canMove;
 }
 [System.Serializable]
 public class Data
