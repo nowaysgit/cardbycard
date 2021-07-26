@@ -13,8 +13,10 @@ public class UIManager : MonoBehaviour
     public Text TextMoney;
     public Slider SliderHealth;
     public Slider SliderMana;
+    public Slider SliderDistance;
     public GameObject DiePanel;
     public UIAnimator UIAnimator;
+    public UIMap UIMap;
 
     [Header("Inventory UI")]
     public UIInventory UIInventory;
@@ -22,14 +24,33 @@ public class UIManager : MonoBehaviour
 
     [Header("MainMenu")]
     public GameObject MainMenu;
-    
-    public void OnGameRestart()
+
+
+    private int NumMovesInGame;
+
+
+    private void Awake() 
     {
+        Game.singletone.OnGameStart.AddListener(GameStart);
+        Game.singletone.OnPlayerRespawn.AddListener(PlayerRespawn);
+        Game.singletone.OnPlayerMoved.AddListener(UpdateDistance);
+
+
+        Game.singletone.OnPlayerHealthSpend.AddListener(UpdateHealthBar);
+        Game.singletone.OnPlayerManaSpend.AddListener(UpdateManaBar);
+        Game.singletone.OnPlayerMoneySpend.AddListener(UpdateMoney);
+    }
+    
+    public void GameStart()
+    {
+        NumMovesInGame = 0;
         UIInventory.UpdateInventory("Clear");
         UILoot.UpdateInventory("Clear");
         DiePanel.SetActive(false);
+        SliderDistance.value = 0;
+        SliderDistance.maxValue = Game.Map.curretLocation.Info.distance;
     }
-    public void OnPlayerRespawn()
+    public void PlayerRespawn()
     {
         SliderHealth.maxValue = Game.singletone.Player.HealthMax;
         SliderMana.maxValue = Game.singletone.Player.ManaMax;
@@ -52,5 +73,14 @@ public class UIManager : MonoBehaviour
     public void UpdateMoney(int amount)
     {
         TextMoney.text = Convert.ToString(amount);
+    }
+    public void UpdateDistance()
+    {
+        if(Game.singletone.GameStateInGame.IsLocationEnd())
+        {
+            return;
+        }
+        NumMovesInGame++;
+        SliderDistance.value = NumMovesInGame;
     }
 }

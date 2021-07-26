@@ -1,7 +1,7 @@
 {
     "enemyList": [{
             "spawned": true,
-            "id": 1,
+            "id": 0,
             "title": "Ogr Mag",
             "type": "Enemy",
             "color": "1.000, 0.510, 0.510, 1.000",
@@ -15,45 +15,67 @@
         },
         {
             "spawned": true,
-            "id": 2,
-            "title": "Skeleton",
+            "id": 1,
+            "title": "Skeleton Swordsman",
             "type": "Enemy",
             "color": "1.000, 0.510, 0.510, 1.000",
             "health": 60,
             "maxHealth": 60,
             "mana": 100,
             "damage": 6,
-            "spriteName": "Skeleton1",
+            "spriteName": "Skeleton_Swordsman",
             "lvl": 2,
             "canMove": false
         }
     ],
     "lootList": [{
             "spawned": true,
-            "id": 102,
-            "title": "Chest1",
+            "id": 0,
+            "title": "Chest LVL 1",
             "type": "Loot",
             "color": "0.171, 0.000, 1.000, 1.000",
             "size": 2,
-            "spriteName": "Chest1",
+            "spriteName": "Chest_Lvl_1",
             "lvl": 0,
             "canMove": true
         },
         {
-            "spawned": false,
-            "id": 101,
-            "title": "Corpse",
+            "spawned": true,
+            "id": 1,
+            "title": "Chest LVL 2",
             "type": "Loot",
-            "color": "0.690, 0.970, 0.600, 1.000",
+            "color": "0.171, 0.000, 1.000, 1.000",
             "size": 2,
-            "spriteName": "Chest1",
-            "lvl": 0,
+            "spriteName": "Chest_Lvl_2",
+            "lvl": 1,
+            "canMove": true
+        },
+        {
+            "spawned": true,
+            "id": 2,
+            "title": "Chest LVL 3",
+            "type": "Loot",
+            "color": "0.171, 0.000, 1.000, 1.000",
+            "size": 2,
+            "spriteName": "Chest_Lvl_3",
+            "lvl": 2,
+            "canMove": true
+        },
+        {
+            "spawned": true,
+            "id": 3,
+            "title": "Chest LVL 4",
+            "type": "Loot",
+            "color": "0.171, 0.000, 1.000, 1.000",
+            "size": 2,
+            "spriteName": "Chest_Lvl_4",
+            "lvl": 3,
             "canMove": true
         }
     ],
     "blockList": [{
             "spawned": true,
-            "id": 202,
+            "id": 0,
             "title": "Wall",
             "type": "Block",
             "color": "0.970, 0.920, 0.600, 1.000",
@@ -66,7 +88,7 @@
         },
         {
             "spawned": true,
-            "id": 201,
+            "id": 1,
             "title": "Rock",
             "type": "Block",
             "color": "0.970, 0.920, 0.600, 1.000",
@@ -80,7 +102,7 @@
     ],
     "emptyList": [{
             "spawned": true,
-            "id": 301,
+            "id": 0,
             "title": "Stones 1",
             "type": "Empty",
             "color": "0.970, 0.920, 0.600, 1.000",
@@ -93,7 +115,7 @@
         },
         {
             "spawned": true,
-            "id": 302,
+            "id": 1,
             "title": "Bush1 1",
             "type": "Empty",
             "color": "0.970, 0.920, 0.600, 1.000",
@@ -106,31 +128,31 @@
         }
     ],
     "shopList": [{
-        "spawned": true,
-        "id": 401,
-        "title": "Base Shop",
-        "type": "Shop",
-        "color": "0.970, 0.920, 0.600, 1.000",
-        "health": 0,
-        "maxHealth": 0,
-        "damage": 0,
-        "spriteName": "Shop1",
-        "lvl": 1,
-        "canMove": true
-    },
-    {
-        "spawned": true,
-        "id": 402,
-        "title": "Base Shop 2",
-        "type": "Shop",
-        "color": "0.970, 0.920, 0.600, 1.000",
-        "health": 0,
-        "maxHealth": 0,
-        "damage": 0,
-        "spriteName": "Shop1",
-        "lvl": 0,
-        "canMove": true
-    }
+            "spawned": true,
+            "id": 0,
+            "title": "Base Shop",
+            "type": "Shop",
+            "color": "0.970, 0.920, 0.600, 1.000",
+            "health": 0,
+            "maxHealth": 0,
+            "damage": 0,
+            "spriteName": "Shop1",
+            "lvl": 1,
+            "canMove": true
+        },
+        {
+            "spawned": true,
+            "id": 1,
+            "title": "Base Shop 2",
+            "type": "Shop",
+            "color": "0.970, 0.920, 0.600, 1.000",
+            "health": 0,
+            "maxHealth": 0,
+            "damage": 0,
+            "spriteName": "Shop1",
+            "lvl": 0,
+            "canMove": true
+        }
     ],
     "itemList": [{
             "spawned": true,
@@ -208,7 +230,7 @@
 
 
 
-        
+
         {
             "spawned": false,
             "id": 5,
@@ -300,6 +322,43 @@
             "cost": 20,
             "lvl": 0,
             "description": "Moneys"
+        }
+    ],
+    "locationList": [{
+            "id": 0,
+            "title": "Road",
+            "type": "Road",
+            "dungeon ": "Any",
+            "description": "Road",
+            "distance": 10,
+            "lvl": 0
+        },
+        {
+            "id": 1,
+            "title": "Cave",
+            "type": "Location",
+            "dungeon ": "Any",
+            "description": "Cave",
+            "distance": 100,
+            "lvl": 1
+        },
+        {
+            "id": 2,
+            "title": "Temple",
+            "type": "Location",
+            "dungeon ": "Any",
+            "description": "Temple",
+            "distance": 100,
+            "lvl": 2
+        },
+        {
+            "id": 3,
+            "title": "City",
+            "type": "Location",
+            "dungeon ": "Any",
+            "description": "City",
+            "distance": 100,
+            "lvl": 3
         }
     ]
 }

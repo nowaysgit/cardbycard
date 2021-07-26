@@ -10,4 +10,8 @@ public class CardEmpty : CardBase
         if(!Alive) { return 0.0f; }
         return 0.0f;
     }
+    public override void OnLoad()
+    {
+        this.gameObject.transform.GetChild(0).gameObject.GetComponent<TextMesh>().text = "";
+    }
 }

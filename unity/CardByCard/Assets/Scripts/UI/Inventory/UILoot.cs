@@ -64,7 +64,15 @@ public class UILoot : UIInventory
             }
             UpdateInventory("Remove", slot);
         }
-        if (Count <= 0) gameObject.SetActive(false);
+        if (Count <= 0) Close();
+    }
+    public void Close()
+    {
+        if(Game.singletone.GameStateInGame.IsLocationEnd() && Game.singletone.CurrentState == Game.singletone.GameStateInGame && Game.FactoryCard.cardsTypeCount[0] <= 0 && Game.FactoryCard.cardsTypeCount[1] <= 1)
+        {
+            Game.singletone.NextState();
+        }
+        gameObject.SetActive(false);
     }
     public override void UpdateInventory(string act, int slot = 0, Item item = null, string UiName = "Corpse")
     {

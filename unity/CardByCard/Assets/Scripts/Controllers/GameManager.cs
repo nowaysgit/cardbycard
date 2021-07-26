@@ -14,8 +14,10 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(ControllerField))]
 [RequireComponent(typeof(FactoryItem))]
 [RequireComponent(typeof(FactoryCard))]
+[RequireComponent(typeof(FactoryLocation))]
 [RequireComponent(typeof(UIManager))]
 [RequireComponent(typeof(UIAnimator))]
+[RequireComponent(typeof(Map))]
 
 [System.Serializable]
 public class IntEvent : UnityEvent<int> {}
@@ -27,6 +29,8 @@ public class StringEvent : UnityEvent<string> {}
 public class TwoFloatEvent : UnityEvent<float, float> {}
 [System.Serializable]
 public class TwoIntEvent : UnityEvent<int, int> {}
+[System.Serializable]
+public class LocationEvent : UnityEvent<Location> {}
 
 public class GameManager : MonoBehaviour
 { 
@@ -41,16 +45,18 @@ public class GameManager : MonoBehaviour
     private bool isInitialized;
     [SerializeField] public static Data Data;
     [SerializeField] private InfoItem[] DEBUGitemList;
+    [SerializeField] private InfoLocation[] DEBUGlocationList;
 
-    public static ControllerField ControllerField { get; private set; }
     public static FactoryItem FactoryItem { get; private set; }
     public static FactoryCard FactoryCard { get; private set; }
+    public static FactoryLocation FactoryLocation { get; private set; }
     public static UIManager UIManager { get; private set; }
     public static UIAnimator UIAnimator { get; private set; }
     public static GameManager singletone { get; private set; }
+    public static Map Map { get; private set; }
 
-    [Header("On Game Restart")]
-    public UnityEvent OnGameRestart;
+    [Header("On Game Start")]
+    public UnityEvent OnGameStart;
 
 
     [Header("On Game Preparation")]
@@ -59,6 +65,14 @@ public class GameManager : MonoBehaviour
 
     [Header("On Game End")]
     public UnityEvent OnGameEnd;
+
+
+    [Header("On Complite Location")]
+    public UnityEvent OnCompliteLocation;
+    [Header("On Choose Location")]
+    public LocationEvent OnChooseLocation;
+
+
 
 
     [Header("On Player Respawn")]
@@ -136,22 +150,17 @@ public class GameManager : MonoBehaviour
         {
             Data = JsonUtility.FromJson<Data>(jsonFile.text); // STATIC DATA
             DEBUGitemList = Data.ItemList;
+            DEBUGlocationList = Data.LocationList;
             Player = (Instantiate(playerPrefab, new Vector3(0, 0, -1), Quaternion.identity)).GetComponent<ControllerPlayer>();
             Player.Load(200, 100, 10.0f, "Character1");
 
             FactoryItem = gameObject.GetComponent<FactoryItem>();
             FactoryCard = gameObject.GetComponent<FactoryCard>();
+            FactoryLocation = gameObject.GetComponent<FactoryLocation>();
             UIManager = gameObject.GetComponent<UIManager>();
             UIAnimator = gameObject.GetComponent<UIAnimator>();
-
-            OnGameRestart.AddListener(UIManager.OnGameRestart);
-            OnPlayerRespawn.AddListener(UIManager.OnPlayerRespawn);
-            OnCardDie.AddListener(FactoryCard.OnCardDie);
-            OnGameEnd.AddListener(FactoryCard.OnGameEnd);
-
-            OnPlayerHealthSpend.AddListener(UIManager.UpdateHealthBar);
-            OnPlayerManaSpend.AddListener(UIManager.UpdateManaBar);
-            OnPlayerMoneySpend.AddListener(UIManager.UpdateMoney);
+            Map = gameObject.GetComponent<Map>();
+            Map.Load();
 
             CurrentState = GameStateMainMenu;
             CurrentState.Enter();

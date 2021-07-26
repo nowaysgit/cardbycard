@@ -21,6 +21,8 @@ public class Interactive : MonoBehaviour
     public virtual float Damage { get { return damage; } set { damage = value; } }
     public virtual float Shield { get { return shield; } set { shield = value; } }
     public virtual bool Alive { get; protected set; }
+    public virtual int UniqueLvl { get; protected set; }
+
     public float ManaCost = 0.0f;
 
     [Header("On Died")] 

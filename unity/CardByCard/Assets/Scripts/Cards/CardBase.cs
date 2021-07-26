@@ -54,14 +54,20 @@ public abstract class CardBase : Interactive, ICard
     {
         Info = Game.Data.CopyFromSerialize<InfoCard>(info);
         possition = new Vector2Int (x, y); 
-        this.gameObject.transform.GetChild(0).gameObject.GetComponent<TextMesh>().text = Info.title;
-        sprite.sprite = Resources.Load<Sprite>(Info.spriteName);
 
         HealthMax = Info.maxHealth;
         ManaMax = Info.maxMana;
         Mana = Info.mana;
         Health = Info.health;
         Damage = Info.damage;
+        UniqueLvl = info.lvl;
+
+        this.gameObject.transform.GetChild(0).gameObject.GetComponent<TextMesh>().text = (UniqueLvl+1).ToString();
+        sprite.sprite = Resources.Load<Sprite>(Info.spriteName);
+        OnLoad();
+    }
+    public virtual void OnLoad() //overridden by heirs and called after Load
+    {
     }
 
     public virtual float Event(float getdamage) //RETURN DAMAGE
@@ -88,8 +94,11 @@ public abstract class CardBase : Interactive, ICard
         if(!Alive) return;
         Alive = false;
         OnDied.Invoke();
-        Game.singletone.OnCardDie.Invoke(Info.type);
         Instantiate(FxDie, transform.position, Quaternion.identity);
+    }
+    private void OnDestroy() 
+    {
+        Game.singletone.OnCardDie.Invoke(Info.type);
     }
     public virtual void isMoved() //overridden by heirs and called after player change position
     {

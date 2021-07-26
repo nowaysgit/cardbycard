@@ -44,7 +44,6 @@ public class Control : MonoBehaviour
         if (canmove)
         {
             isInMoved = true;
-
             Game.singletone.GameStateInGame.TryMakeNewCard(possition, transform.position);
             ChangePossition(x, y);
         }

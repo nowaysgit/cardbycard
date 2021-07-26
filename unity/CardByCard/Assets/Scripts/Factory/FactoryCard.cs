@@ -14,19 +14,28 @@ public class FactoryCard : FactoryBase
     [SerializeField] private Dictionary<string, int> typeCardId = new Dictionary<string, int> { {"Enemy", 0}, {"Loot", 1}, {"Block", 2}, {"Empty", 3}, {"Shop", 4}};
     [SerializeField] private int[] chanceCardProgression;
     [SerializeField] private int[] maxCardsTypeCount = { 6, 9, 1, 3, 0, }; // ( Enemy | Loot | Block | Empty | Shop )
-    [SerializeField] private int[] cardsTypeCount = { 0, 0, 0, 0, 0, };    // ( Enemy | Loot | Block | Empty | Shop )
+    [SerializeField] public int[] cardsTypeCount = { 0, 0, 0, 0, 0, };    // ( Enemy | Loot | Block | Empty | Shop )
 
     public GameStateInGame GameStateInGame
     {
         get { return Game.singletone.GameStateInGame; }
     }
+
+    private void Awake()
+    {
+        Game.singletone.OnCardDie.AddListener(CardDie);
+    }
     public void Make(int x, int y, Vector2 pos, int typeID = -1, int itemID = -1)
     {
+        if(Game.singletone.GameStateInGame.IsLocationEnd() && typeID != 1)
+        {
+            GameStateInGame.Spawn(x, y, pos, Game.Data.EmptyList[0], 3);
+            return;
+        }
         if (itemID != -1)
         {
             var loot = Game.Data.LootList[itemID]; // Minus not spawned element they was last
             GameStateInGame.Spawn(x, y, pos, loot, 1);
-            cardsTypeCount[typeID]++;
             return;
         }
         while (typeID == -1)
@@ -43,17 +52,11 @@ public class FactoryCard : FactoryBase
             infoCard = MakeInfo(typeID);
         }
         GameStateInGame.Spawn(x, y, pos, infoCard, typeID);
-        cardsTypeCount[typeID]++;
     }
-    public void OnCardDie(string type)
+    public void CardDie(string type)
     {
         cardsTypeCount[typeCardId[type]]--;
     }
-    public void OnGameEnd()
-    {
-        Array.Clear(cardsTypeCount, 0, cardsTypeCount.Length);
-    }
-
     public InfoCard MakeInfo(int typeID)
     {
         var list = (InfoCard[]) ((Game.Data.GetType()).GetProperty(typeCardName[typeID])).GetValue(Game.Data, null);
